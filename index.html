@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Arone Benedict L — Prompt Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --border: #1e1e2e;
+    --accent: #7c6af7;
+    --accent2: #c084fc;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --green: #34d399;
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-display);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Ambient background glow */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: -200px;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(124,106,247,0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(192,132,252,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* NAV */
+  nav {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0;
+    background: rgba(10,10,15,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  nav .container { display: flex; justify-content: space-between; align-items: center; }
+  .nav-logo {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* HERO */
+  .hero {
+    padding: 96px 0 72px;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 28px; height: 1px;
+    background: var(--accent);
+  }
+  h1 {
+    font-size: clamp(40px, 7vw, 72px);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+  h1 .highlight {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-sub {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 520px;
+    margin-bottom: 40px;
+    font-weight: 400;
+    line-height: 1.7;
+  }
+  .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: opacity 0.2s, transform 0.15s;
+    letter-spacing: 0.01em;
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-outline {
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .btn-outline:hover { border-color: var(--accent); transform: translateY(-1px); }
+
+  /* PROMPT SHOWCASE — the signature section */
+  .prompt-section {
+    padding: 80px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .section-desc {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 40px;
+    max-width: 480px;
+  }
+
+  .prompt-grid { display: grid; gap: 16px; }
+
+  .prompt-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .prompt-card:hover { border-color: rgba(124,106,247,0.4); }
+
+  .prompt-card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .prompt-card-title {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent2);
+    font-weight: 700;
+  }
+  .prompt-tag {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: var(--muted);
+    background: var(--border);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .prompt-body { padding: 20px; }
+  .prompt-block {
+    background: rgba(124,106,247,0.07);
+    border-left: 2px solid var(--accent);
+    padding: 14px 16px;
+    border-radius: 0 6px 6px 0;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: #c8c8e0;
+    line-height: 1.7;
+    margin-bottom: 14px;
+    white-space: pre-wrap;
+  }
+  .prompt-result {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .prompt-result strong { color: var(--green); font-size: 12px; font-family: var(--font-mono); display: block; margin-bottom: 6px; }
+
+  /* SKILLS */
+  .skills-section {
+    padding: 80px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .skill-card-label {
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--accent);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+  }
+  .skill-card h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .skill-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* PROJECTS */
+  .projects-section {
+    padding: 80px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+  .project-card:hover { border-color: rgba(124,106,247,0.4); }
+  .project-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
+  .project-title { font-size: 17px; font-weight: 600; }
+  .project-stack {
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .stack-tag {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    color: var(--accent2);
+    background: rgba(192,132,252,0.1);
+    border: 1px solid rgba(192,132,252,0.2);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .project-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* CONTACT */
+  .contact-section { padding: 80px 0; }
+  .contact-card {
+    background: var(--surface);
+    border: 1px solid rgba(124,106,247,0.25);
+    border-radius: 12px;
+    padding: 48px;
+    text-align: center;
+  }
+  .contact-card h2 { font-size: 32px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em; }
+  .contact-card p { color: var(--muted); font-size: 15px; margin-bottom: 32px; }
+  .contact-links { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    text-align: center;
+  }
+  footer p { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
+
+  @media (max-width: 600px) {
+    .hero { padding: 60px 0 48px; }
+    .contact-card { padding: 28px 20px; }
+    .nav-links { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <span class="nav-logo">arone.benedict</span>
+    <div class="nav-links">
+      <a href="#prompts">Prompts</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Prompt Engineer Intern · Applying @ WarpDrive Tech Works</div>
+    <h1>I engineer<br/><span class="highlight">language that<br/>makes AI work.</span></h1>
+    <p class="hero-sub">
+      M.Tech CSE (Business Analytics) at VIT Chennai. I combine ML depth with NLP expertise and hands-on LLM prompting to build AI systems that actually deliver reliable, structured output.
+    </p>
+    <div class="hero-cta">
+      <a href="https://github.com/AroneBenedict/" target="_blank" class="btn-primary">GitHub Profile</a>
+      <a href="mailto:aronebenedict.l2022@vitstudent.ac.in" class="btn-outline">aronebenedict.l2022@vitstudent.ac.in</a>
+    </div>
+  </div>
+</section>
+
+<section class="prompt-section" id="prompts">
+  <div class="container">
+    <div class="section-label">Core Competency</div>
+    <h2 class="section-title">Prompt Engineering Samples</h2>
+    <p class="section-desc">Real prompts I've built for ML, data analysis, and NLP workflows — showing structure, constraint handling, and output control.</p>
+
+    <div class="prompt-grid">
+
+      <div class="prompt-card">
+        <div class="prompt-card-header">
+          <span class="prompt-card-title">// PROMPT 01 — Structured JSON Extraction</span>
+          <span class="prompt-tag">Zero-shot · Output Control</span>
+        </div>
+        <div class="prompt-body">
+          <div class="prompt-block">You are a financial data extractor. Given unstructured earnings call text, extract the following fields and return ONLY valid JSON — no preamble, no explanation:
+
+{
+  "company": string,
+  "quarter": string,
+  "revenue_usd_millions": number | null,
+  "yoy_growth_pct": number | null,
+  "key_risks": [string] (max 3),
+  "sentiment": "positive" | "neutral" | "negative"
+}
+
+If a field cannot be determined, set it to null. Never hallucinate figures.</div>
+          <div class="prompt-result">
+            <strong>// WHY IT WORKS</strong>
+            Explicit schema prevents format drift. Null fallback eliminates hallucination risk on missing data. Used this pattern with FinBERT pipelines to structure raw SEC filings for downstream analysis.
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-card">
+        <div class="prompt-card-header">
+          <span class="prompt-card-title">// PROMPT 02 — Chain-of-Thought Debugging</span>
+          <span class="prompt-tag">CoT · Step-by-step Reasoning</span>
+        </div>
+        <div class="prompt-body">
+          <div class="prompt-block">You are an ML debugging assistant. When given a model performance issue, follow this exact reasoning chain:
+
+STEP 1 — SYMPTOMS: Restate the observed metrics in precise terms.
+STEP 2 — HYPOTHESES: List the 3 most probable root causes, ranked by likelihood.
+STEP 3 — DIAGNOSTIC TESTS: For each hypothesis, name one concrete test to confirm or rule it out.
+STEP 4 — RECOMMENDED FIX: Given the evidence, state your top recommendation with justification.
+
+Keep each step under 60 words. Do not skip steps.</div>
+          <div class="prompt-result">
+            <strong>// WHY IT WORKS</strong>
+            Enforced step structure prevents the model from jumping to conclusions. The 60-word cap maintains precision. I built this pattern while debugging LSTM failure mode detection in my Predictive Maintenance project.
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-card">
+        <div class="prompt-card-header">
+          <span class="prompt-card-title">// PROMPT 03 — Role-Conditioned Topic Classifier</span>
+          <span class="prompt-tag">Few-shot · BART · Zero-shot NLP</span>
+        </div>
+        <div class="prompt-body">
+          <div class="prompt-block">You are a social media analyst specializing in real-time trend classification. Classify the following tweet into exactly ONE of these categories: [Technology, Finance, Sports, Politics, Entertainment, Other].
+
+Rules:
+- Return only the category label — nothing else.
+- If the tweet contains multiple topics, choose the dominant one.
+- Treat ambiguous tweets as "Other".
+
+Tweet: "{tweet_text}"</div>
+          <div class="prompt-result">
+            <strong>// WHY IT WORKS</strong>
+            Single-label enforcement + explicit ambiguity handling eliminates multi-label leakage. Used as a pre-classifier layer before BART zero-shot classification in my Real-Time Hashtag Trend Analyzer pipeline.
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-card">
+        <div class="prompt-card-header">
+          <span class="prompt-card-title">// PROMPT 04 — Gemini API System Prompt Design</span>
+          <span class="prompt-tag">System Prompt · Persona · Constraint</span>
+        </div>
+        <div class="prompt-body">
+          <div class="prompt-block">SYSTEM: You are ARIA, an ML research assistant embedded in a data engineering dashboard. Your personality is precise, concise, and direct — no filler phrases like "Certainly!" or "Great question!".
+
+CONSTRAINTS:
+- All responses under 150 words unless the user explicitly asks for detail.
+- If asked about data outside the provided context window, respond: "I don't have that data in scope."
+- Never fabricate statistics. Cite "provided dataset" or "general knowledge" explicitly.
+
+Begin each session by asking: "What dataset are we working with today?"</div>
+          <div class="prompt-result">
+            <strong>// WHY IT WORKS</strong>
+            Persona + hard constraints prevent verbosity and hallucination simultaneously. The scope boundary forces the model to signal uncertainty rather than confabulate. Pattern used with Gemini API integrations in analytics dashboards.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="skills-section" id="skills">
+  <div class="container">
+    <div class="section-label">Technical Depth</div>
+    <h2 class="section-title">What I Bring</h2>
+    <p class="section-desc">ML background that makes prompting grounded — not just creative writing with AI.</p>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-card-label">LLM & NLP</div>
+        <h4>Language Models</h4>
+        <p>FinBERT, BART zero-shot, Sentence-BERT, BERTopic, VADER — built multi-model NLP stacks from scratch.</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-label">Prompt Patterns</div>
+        <h4>Engineering Techniques</h4>
+        <p>Zero-shot, few-shot, chain-of-thought, role conditioning, output schema enforcement, constraint injection.</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-label">ML Foundation</div>
+        <h4>Deep Learning & MLOps</h4>
+        <p>CNN, LSTM, BiLSTM, XGBoost. FastAPI + Streamlit deployment. End-to-end ML pipeline experience.</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-label">Data Engineering</div>
+        <h4>Real-Time Systems</h4>
+        <p>Apache Kafka streaming pipelines. Feature engineering, EDA, Pandas/NumPy — data-first problem solving.</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-label">AI Tools</div>
+        <h4>AI-Assisted Dev</h4>
+        <p>Gemini API, Cursor, GitHub Copilot. Comfortable in AI-augmented development environments.</p>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-label">Design × AI</div>
+        <h4>Creative + Technical</h4>
+        <p>Advanced Photoshop & Illustrator. Figma. Brand strategy background — bridges visual and technical thinking.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="projects-section" id="projects">
+  <div class="container">
+    <div class="section-label">Featured Work</div>
+    <h2 class="section-title">Projects</h2>
+    <p class="section-desc">End-to-end systems, not toy demos.</p>
+
+    <div class="project-card">
+      <div class="project-header">
+        <span class="project-title">Real-Time Hashtag Trend Analyzer</span>
+        <div class="project-stack">
+          <span class="stack-tag">Kafka</span>
+          <span class="stack-tag">BART</span>
+          <span class="stack-tag">BERT</span>
+          <span class="stack-tag">BERTopic</span>
+          <span class="stack-tag">Streamlit</span>
+        </div>
+      </div>
+      <p class="project-desc">Production-style streaming pipeline ingesting high-velocity social data via Kafka. Multi-model NLP stack: VADER + BERT for sentiment, BART for zero-shot topic classification, LDA + BERTopic for dynamic topic modeling, Sentence-BERT for semantic clustering. Live dashboard with continuous refresh for real-time trend tracking.</p>
+    </div>
+
+    <div class="project-card">
+      <div class="project-header">
+        <span class="project-title">Predictive Maintenance Dashboard</span>
+        <div class="project-stack">
+          <span class="stack-tag">LSTM</span>
+          <span class="stack-tag">XGBoost</span>
+          <span class="stack-tag">FastAPI</span>
+          <span class="stack-tag">Streamlit</span>
+        </div>
+      </div>
+      <p class="project-desc">Full ML pipeline on AI4I 2020 dataset predicting 5 equipment failure modes. LSTM for temporal patterns + XGBoost for tabular classification. Rolling statistics, lag features, min-max normalization. Interactive dashboard with real-time failure prediction and feature importance visualization.</p>
+    </div>
+
+    <div class="project-card">
+      <div class="project-header">
+        <span class="project-title">Federated Learning + Predictive Maintenance</span>
+        <div class="project-stack">
+          <span class="stack-tag">FedAvg</span>
+          <span class="stack-tag">FedProx</span>
+          <span class="stack-tag">LSTM</span>
+          <span class="stack-tag">SMOTE</span>
+        </div>
+      </div>
+      <p class="project-desc">Privacy-preserving federated learning system across 3 simulated clients. LSTM models trained locally, aggregated without centralizing raw data. Non-IID distribution + class imbalance handled via SMOTE and weighted loss. Benchmarked vs centralized training. Targeting IEEE publication.</p>
+    </div>
+  </div>
+</section>
+
+<section class="contact-section" id="contact">
+  <div class="container">
+    <div class="contact-card">
+      <h2>Let's build something.</h2>
+      <p>M.Tech CSE (Business Analytics) · VIT Chennai · CGPA 7.81<br/>Open to Prompt Engineer Intern role at WarpDrive Tech Works</p>
+      <div class="contact-links">
+        <a href="mailto:aronebenedict.l2022@vitstudent.ac.in" class="btn-primary">Send Email</a>
+        <a href="https://github.com/AroneBenedict/" target="_blank" class="btn-outline">GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>Arone Benedict L · Chennai, India · M.Tech CSE (Business Analytics) · VIT Chennai</p>
+  </div>
+</footer>
+
+</body>
+</html>
