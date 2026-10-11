@@ -1,0 +1,14 @@
+@font-face { font-family: 'Bricolage Grotesque'; src: url('assets/fonts/bricolage-grotesque.woff2') format('woff2'); font-weight: 200 800; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Public Sans'; src: url('assets/fonts/public-sans.woff2') format('woff2'); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: 'IBM Plex Mono'; src: url('assets/fonts/ibm-plex-mono-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'IBM Plex Mono'; src: url('assets/fonts/ibm-plex-mono-500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: #F2F6F5; }
+.proto-bar { position: sticky; top: 0; z-index: 100; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 18px; min-height: 40px; padding: 4px 16px; box-sizing: border-box; background: #F4B223; color: #0B2230; font: 600 13px/1.35 'Public Sans', 'Segoe UI', system-ui, sans-serif; text-align: center; }
+.proto-bar a { color: #0B2230; text-underline-offset: 3px; white-space: nowrap; }
+.shell { min-height: calc(100vh - 40px); }
+[data-screen=Sitemap] .card:has(> table) { overflow-x: auto; }
+[data-screen=Sitemap] table { min-width: 860px; }
+.phone-stage { display: flex; justify-content: center; padding: 32px 16px 48px; }
+.phone-stage > .sc-host { border-radius: 28px; overflow: hidden; box-shadow: 0 24px 60px rgba(7, 40, 58, .3); }
